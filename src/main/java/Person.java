@@ -5,7 +5,7 @@ public class Person {
 
     protected final String name;
     protected final String surname;
-    protected int age;
+    protected Integer age = null;
     protected String residencePlace;
 
     public Person(String name, String surname) {
@@ -41,7 +41,8 @@ public class Person {
     }
 
     public OptionalInt getAge() {
-        return OptionalInt.of(age);
+        if (age != null) return OptionalInt.of(age);
+        return OptionalInt.empty();
     }
 
     public String getResidencePlace() {
@@ -53,7 +54,7 @@ public class Person {
     }
 
     public boolean hasAge() {
-        return !getAge().isEmpty();
+        return getAge().isPresent();
     }
 
     public boolean hasResidencePlace() {
@@ -77,7 +78,7 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return age == person.age
+        return Objects.equals(age, person.age)
                 && Objects.equals(name, person.name)
                 && Objects.equals(surname, person.surname)
                 && Objects.equals(residencePlace, person.residencePlace);
@@ -99,12 +100,36 @@ public class Person {
 
     @Override
     public String toString() {
+        if (this.hasAge() && this.getAge().getAsInt() >= 0 && this.hasResidencePlace()) {
+            return "Person{" +
+                    "name='" + name + '\'' +
+                    ", surname='" + surname + '\'' +
+                    ", age=" + age +
+                    ", residencePlace='" + residencePlace + '\'' +
+                    '}';
+        }
+
+        if (this.hasAge() && this.getAge().getAsInt() >= 0) {
+            return "Person{" +
+                    "name='" + name + '\'' +
+                    ", surname='" + surname + '\'' +
+                    ", age=" + age + '\'' +
+                    '}';
+        }
+
+        if (this.hasResidencePlace()) {
+            return "Person{" +
+                    "name='" + name + '\'' +
+                    ", surname='" + surname + '\'' +
+                    ", residencePlace='" + residencePlace + '\'' +
+                    '}';
+        }
+
         return "Person{" +
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", age=" + age +
-                ", residencePlace='" + residencePlace + '\'' +
                 '}';
+
     }
 }
 

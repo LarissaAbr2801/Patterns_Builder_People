@@ -4,7 +4,6 @@ public class Main {
                 .setName("Анна")
                 .setSurname("Вольф")
                 .build();
-        System.out.println(mom);
         Person son = mom.newChildBuilder()
                 .setName("Антошка")
                 .setAge(11)
@@ -17,10 +16,9 @@ public class Main {
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
-
         try {
             // Возраст недопустимый
-            new PersonBuilder().setAge(-100).build();
+            new PersonBuilder().setName("").setSurname("f").setAge(-100).build();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }

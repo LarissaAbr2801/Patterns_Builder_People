@@ -31,22 +31,28 @@ public class PersonBuilder implements IBuilder {
 
     @Override
     public Person build() {
-        Person person = new Person(name, surname);
+        Person person = new Person(name, surname, age, residencePlace);
 
-        if (!person.hasAge() || !person.hasResidencePlace()){
+        if (person.getName() == null && person.getSurname() == null) {
+            throw new IllegalArgumentException("Вы не ввели обязательные данные!");
+        }
+
+        if (person.hasAge() && person.getAge().getAsInt() > 0 && person.hasResidencePlace()) {
             return person;
         }
-        if (person.hasAge() && person.getAge().getAsInt() >= 0 && person.hasResidencePlace()) {
-            return new Person(name, surname, age, residencePlace);
-        }
 
-        if (person.hasAge() && person.getAge().getAsInt() >= 0) {
+        if (person.hasAge() && person.getAge().getAsInt() > 0) {
             return new Person(name, surname, age);
         }
 
         if (person.hasResidencePlace()) {
             return new Person(name, surname, residencePlace);
         }
-        throw new IllegalArgumentException("Вы ввели некорректно данные!");
+
+        if (person.getAge().getAsInt() == 0 && !person.hasResidencePlace()) {
+            return new Person(name, surname);
+        }
+        throw new IllegalArgumentException("Вы ввели данные некорректно!");
     }
 }
+
