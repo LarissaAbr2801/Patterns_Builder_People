@@ -5,7 +5,7 @@ public class Person {
 
     protected final String name;
     protected final String surname;
-    protected Integer age = null;
+    protected int age;
     protected String residencePlace;
 
     public Person(String name, String surname) {
@@ -41,8 +41,7 @@ public class Person {
     }
 
     public OptionalInt getAge() {
-        if (age != null) return OptionalInt.of(age);
-        return OptionalInt.empty();
+        return OptionalInt.of(age);
     }
 
     public String getResidencePlace() {
@@ -54,7 +53,7 @@ public class Person {
     }
 
     public boolean hasAge() {
-        return getAge().isPresent();
+        return age >= 0;
     }
 
     public boolean hasResidencePlace() {
@@ -66,11 +65,14 @@ public class Person {
     }
 
     public void happyBirthday() {
-        if (hasAge()) {
-            age = getAge().getAsInt();
-            age++;
-        }
+        if (hasAge()) age++;
+    }
 
+    public PersonBuilder newChildBuilder() {
+        PersonBuilder builder = new PersonBuilder();
+        builder.surname = this.surname;
+        builder.residencePlace = this.residencePlace;
+        return builder;
     }
 
     @Override
@@ -84,15 +86,6 @@ public class Person {
                 && Objects.equals(residencePlace, person.residencePlace);
     }
 
-    public PersonBuilder newChildBuilder() {
-        PersonBuilder builder = new PersonBuilder();
-        builder.surname = this.surname;
-        builder.residencePlace = this.residencePlace;
-        builder.build();
-        return builder;
-    }
-
-
     @Override
     public int hashCode() {
         return Objects.hash(name, surname, age, residencePlace);
@@ -100,36 +93,26 @@ public class Person {
 
     @Override
     public String toString() {
-        if (this.hasAge() && this.getAge().getAsInt() >= 0 && this.hasResidencePlace()) {
-            return "Person{" +
-                    "name='" + name + '\'' +
-                    ", surname='" + surname + '\'' +
-                    ", age=" + age +
-                    ", residencePlace='" + residencePlace + '\'' +
-                    '}';
+        StringBuilder builder = new StringBuilder();
+        builder.append("Person{ " + "name = ").append(name)
+                .append(", surname = ").append(surname);
+        if (this.hasAge() && this.hasResidencePlace()) {
+            builder.append(", age = ").append(age).append(", residencePlace = ")
+                    .append(residencePlace).append('}');
+            return builder.toString();
         }
 
-        if (this.hasAge() && this.getAge().getAsInt() >= 0) {
-            return "Person{" +
-                    "name='" + name + '\'' +
-                    ", surname='" + surname + '\'' +
-                    ", age=" + age + '\'' +
-                    '}';
+        if (this.hasAge()) {
+            builder.append(", age = ").append(age).append('}');
+            return builder.toString();
         }
 
         if (this.hasResidencePlace()) {
-            return "Person{" +
-                    "name='" + name + '\'' +
-                    ", surname='" + surname + '\'' +
-                    ", residencePlace='" + residencePlace + '\'' +
-                    '}';
+            builder.append(", residencePlace = ").append(residencePlace).append('}');
+            return builder.toString();
         }
-
-        return "Person{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                '}';
-
+        builder.append("}");
+        return builder.toString();
     }
 }
 

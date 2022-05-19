@@ -3,7 +3,10 @@ public class Main {
         Person mom = new PersonBuilder()
                 .setName("Анна")
                 .setSurname("Вольф")
+                .setAge(45)
+                .setResidencePlace("Сидней")
                 .build();
+        mom.happyBirthday();
         Person son = mom.newChildBuilder()
                 .setName("Антошка")
                 .setAge(11)

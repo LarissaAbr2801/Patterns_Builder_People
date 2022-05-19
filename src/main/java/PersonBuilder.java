@@ -2,7 +2,7 @@ public class PersonBuilder implements IBuilder {
 
     protected String name;
     protected String surname;
-    protected int age;
+    protected int age = -1;
     protected String residencePlace;
 
     @Override
@@ -19,6 +19,7 @@ public class PersonBuilder implements IBuilder {
 
     @Override
     public PersonBuilder setAge(int age) {
+        if (age < 0) throw new IllegalArgumentException("Вы ввели некорректный возраст");
         this.age = age;
         return this;
     }
@@ -33,26 +34,9 @@ public class PersonBuilder implements IBuilder {
     public Person build() {
         Person person = new Person(name, surname, age, residencePlace);
 
-        if (person.getName() == null && person.getSurname() == null) {
+        if (name == null || surname == null) {
             throw new IllegalArgumentException("Вы не ввели обязательные данные!");
         }
-
-        if (person.hasAge() && person.getAge().getAsInt() > 0 && person.hasResidencePlace()) {
-            return person;
-        }
-
-        if (person.hasAge() && person.getAge().getAsInt() > 0) {
-            return new Person(name, surname, age);
-        }
-
-        if (person.hasResidencePlace()) {
-            return new Person(name, surname, residencePlace);
-        }
-
-        if (person.getAge().getAsInt() == 0 && !person.hasResidencePlace()) {
-            return new Person(name, surname);
-        }
-        throw new IllegalArgumentException("Вы ввели данные некорректно!");
+        return person;
     }
 }
-
